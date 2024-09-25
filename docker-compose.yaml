@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  headscale:
+    image: headscale/headscale:v0.23.0
+    container_name: headscale
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - /root/vscale/headscale-config:/etc/headscale
+      - /root/vscale/headscale-data/data:/var/lib/headscale
+    command: serve
+    restart: unless-stopped
+    init: true
+    networks:
+      - headscale-network
+
+  derper:
+    container_name: derper
+    image: sparanoid/derp:edge
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "3478:3478/udp"
+      - "33443:443"  # remember to edit addr :33443; nginx vderp proxy-pass 33443 and derp.yaml 33443
+    volumes:
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro
+      - /var/run/tailscale/tailscaled.sock:/var/run/tailscale/tailscaled.sock
+      - /root/certs/derper/vderp.aieffi.top.crt:/app/certs/vderp.aieffi.top.crt:ro
+      - /root/certs/derper/vderp.aieffi.top.key:/app/certs/vderp.aieffi.top.key:ro
+    command: sh -c "
+      derper \
+        -hostname vderp.aieffi.top \
+        -certdir /app/certs \
+        -certmode manual \
+        -verify-clients true"
+    networks:
+      - headscale-network
+
+networks:
+  headscale-network:
+    name: headscale-network
+    driver: bridge
+

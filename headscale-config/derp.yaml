@@ -1,0 +1,26 @@
+regions:
+  901:
+    regionid: 901
+    regioncode: us 
+    regionname: zgo 
+    nodes:
+      - name: 901
+        regionid: 901
+        ipv4: '38.49.46.103'
+        hostname: 'vderp.aieffi.top'
+        stunport: 3478
+        stunonly: false
+        derpport: 33443
+ #  902:
+ #    regionid: 902
+ #    regioncode: hangzhou
+ #    regionname: aliyun cloud
+ #    nodes:
+ #      - name: 902
+ #        regionid: 902
+ #        ipv4: '121.40.147.166'
+ #        hostname: 'derp.7boe.top'
+ #        stunport: 3478
+ #        stunonly: false
+ #        derpport: 443
+
